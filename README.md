@@ -29,7 +29,7 @@ It was givig in between 25 to 35 fps on cpu
 
 # Further Improvement and Application :
 
-Face smile detection and emotion detection is having a wide application in current era like: happyness dtection ,drowsiness detection,etc.
+Face landmark detection and emotion detection is having a wide application in current era like: happyness dtection ,drowsiness detection,etc.
 
 For the further improvement in place of using facial landmark model we can use Deep learning based approaches for refrance we can use this research paper 
 @ A Comparison of Face Verification with Facial Landmarks and Deep Features
