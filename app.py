@@ -1,3 +1,4 @@
+# importing dependencies
 import cv2
 import numpy as np
 import dlib
@@ -17,6 +18,7 @@ import tkinter.font as font
 from pathlib import Path
 from PIL import ImageTk, Image
 
+# creating a window for UI
 window = tk.Tk()
 bgimg= ImageTk.PhotoImage(file = "P1Nzdt.jpg")
 limg= Label(window, i=bgimg)
@@ -25,6 +27,8 @@ window.title("Smile_Recogniser")
 window.configure(background ='light grey')
 window.grid_rowconfigure(0, weight = 1)
 window.grid_columnconfigure(0, weight = 1)
+
+# For diplaying Title
 message = tk.Label(
     window, text ="SMILE RECOGNITION SYSTEM",
     bg ="light blue", fg = "grey", width = 40,
@@ -32,6 +36,7 @@ message = tk.Label(
 
 message.place(x = 300, y = 20)
 
+# for Special note 
 message = tk.Label(
     window, text ="To stop the Feed please press 'q'",
     bg ="blue", fg = "white", width = 30,
@@ -39,7 +44,9 @@ message = tk.Label(
 
 message.place(x = 570, y = 500)
 
+# Smile detection
 def smile(landmark):
+        # Calculate lips width
         lips_width = abs(landmark.parts()[49].x - landmark.parts()[55].x)
 
         # Calculate jaw width
@@ -55,18 +62,21 @@ def smile(landmark):
             result = "No Smile"
         return result
 
+# Videocapture
 def Takevideo():
     cap = cv2.VideoCapture(0)
-
+    
+    #Face detection
     detector = dlib.get_frontal_face_detector()
-
+    
+    #Uploading shape_predictor_68_face_landmarks model 
     predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
     while True:
         start_time = time()
         _ ,frame = cap.read()
         gray = cv2.cvtColor(frame , cv2.COLOR_BGR2GRAY)
-
+        
         faces = detector(gray)
         for face in faces:
             x1 = face.left()
@@ -77,6 +87,7 @@ def Takevideo():
 
             landmark = predictor(gray, face)
             
+            # Displaying Landmarks
             for n in range(48,68):
                 x = landmark.part(n).x
                 y = landmark.part(n).y
@@ -89,12 +100,17 @@ def Takevideo():
 
         cv2.imshow("Frame",frame)
         end_time = time()
+
+        #Calculating FPS
         fps = 1/np.round(end_time - start_time, 3)
         cv2.putText(frame, f"FPS:{fps}", (50, 0), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
         print(f"Frames Per Second : {fps}")
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break 
     cv2.destroyAllWindows()
+
+# Creating a Button to Capture the Video    
 takevideo = tk.Button(window, text ="START",
 command = Takevideo, fg ="grey", bg ="light green",
 width = 10, height = 2, activebackground = "Red",
